@@ -2,11 +2,10 @@
 
 namespace frontend\controllers;
 
-use common\models\NewsSearch;
+use common\models\User;
 use Yii;
 use common\models\News;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
@@ -40,18 +39,28 @@ class NewsController extends Controller
 
         return $this->render('index', [
             'news' => $news,
+            'authors' => User::find()->all(),
         ]);
     }
 
-    /**
-     * Displays a single News model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
+    public function actionAuthor()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $id = (int)Yii::$app->request->get('id');
+
+        if ($id <= 0) {
+            return $this->redirect(['index']);
+        }
+
+        $author = User::find()->where(['id' => $id])->one();
+
+        if (empty($author)) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('index', [
+            'news' => $author->news,
+            'authors' => User::find()->all(),
+            'title' => 'Все новости автора: ' . $author->username,
         ]);
     }
 
@@ -70,54 +79,6 @@ class NewsController extends Controller
             return $this->render('create', [
                 'model' => $model,
             ]);
-        }
-    }
-
-    /**
-     * Updates an existing News model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing News model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the News model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return News the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = News::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 }

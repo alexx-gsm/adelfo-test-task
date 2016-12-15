@@ -201,7 +201,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getNews()
     {
-        return $this->hasMany(News::className(), ['id' => '__user_id']);
+        return $this->hasMany(News::className(), ['__user_id' => 'id']);
     }
 
     public function fill()

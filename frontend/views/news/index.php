@@ -6,15 +6,19 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Новости';
+$this->title = $title ?? 'Последние новости';
 $this->params['breadcrumbs'][] = $this->title;
 
-list($path, $webPath) = Yii::$app->getAssetManager()->publish('@frontend' . '/assets/uploads');
+list( , $webPath) = Yii::$app->getAssetManager()->publish('@frontend' . '/assets/uploads');
 
 ?>
 <div class="news-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+  <h1><?= Html::encode($this->title) ?></h1>
+
+    <?= $this->render('_user_filter', [
+        'authors'=> $authors,
+  ]) ?>
 
   <?php foreach ($news as $item): ?>
     <div class="panel panel-default">
