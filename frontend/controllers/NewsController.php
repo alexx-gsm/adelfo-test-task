@@ -29,7 +29,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Lists all News models.
+     * Lists 3 items from News models.
      * @return mixed
      */
     public function actionIndex()
@@ -40,9 +40,15 @@ class NewsController extends Controller
         return $this->render('index', [
             'news' => $news,
             'authors' => User::find()->all(),
+            'isFilter' => false,
         ]);
     }
 
+    /**
+     * all news by certain author (select by id)
+     *
+     * @return string|\yii\web\Response
+     */
     public function actionAuthor()
     {
         $id = (int)Yii::$app->request->get('id');
@@ -61,6 +67,7 @@ class NewsController extends Controller
             'news' => $author->news,
             'authors' => User::find()->all(),
             'title' => 'Все новости автора: ' . $author->username,
+            'isFilter' => true,
         ]);
     }
 

@@ -8,3 +8,7 @@
 .text {
     padding: 0 10px;
 }
+
+.form-horizontal .form-group {
+    padding: 0 15px;
+}

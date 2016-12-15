@@ -18,6 +18,7 @@ list( , $webPath) = Yii::$app->getAssetManager()->publish('@frontend' . '/assets
 
     <?= $this->render('_user_filter', [
         'authors'=> $authors,
+        'isFilter' => $isFilter,
   ]) ?>
 
   <?php foreach ($news as $item): ?>
@@ -29,7 +30,9 @@ list( , $webPath) = Yii::$app->getAssetManager()->publish('@frontend' . '/assets
           <p class="text"><?php echo $item->text; ?></p>
         </div>
       </div>
-      <div class="panel-footer">Автор: <?php echo $item->author->username; ?></div>
+      <div class="panel-footer">
+        <span>Автор: </span>
+        <a href="/news/author?id=<?php echo $item->author->id; ?>"><?php echo $item->author->username; ?></a></div>
     </div>
   <?php endforeach ?>
 

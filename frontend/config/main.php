@@ -42,6 +42,10 @@ return [
             'rules' => [
             ],
         ],
+        'urlManagerBackEnd' => [
+            'class' => 'yii\web\UrlManager',
+            'hostInfo' => '//back.adelfo.local',
+        ],
     ],
     'params' => $params,
 ];
