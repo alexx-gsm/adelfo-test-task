@@ -96,12 +96,15 @@ class NewsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $image = new UploadForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'image' => $image,
+                'authors' => ArrayHelper::map(User::find()->all(),'id','username'),
             ]);
         }
     }
