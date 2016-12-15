@@ -1,0 +1,10 @@
+.article {
+    display: flex;
+    align-items: flex-start;
+}
+.img-thumbnail {
+    width: 140px;
+}
+.text {
+    padding: 0 10px;
+}

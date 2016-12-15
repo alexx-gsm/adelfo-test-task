@@ -1,14 +1,14 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\News;
+use common\models\News;
 
 /**
- * NewsSearch represents the model behind the search form about `app\models\News`.
+ * NewsSearch represents the model behind the search form about `common\models\News`.
  */
 class NewsSearch extends News
 {
@@ -18,8 +18,8 @@ class NewsSearch extends News
     public function rules()
     {
         return [
-            [['id', '__user_id', 'published'], 'integer'],
-            [['title', 'text'], 'safe'],
+            [['id', '__user_id'], 'integer'],
+            [['title', 'text', 'image'], 'safe'],
         ];
     }
 
@@ -61,11 +61,11 @@ class NewsSearch extends News
         $query->andFilterWhere([
             'id' => $this->id,
             '__user_id' => $this->__user_id,
-            'published' => $this->published,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'text', $this->text]);
+            ->andFilterWhere(['like', 'text', $this->text])
+            ->andFilterWhere(['like', 'image', $this->image]);
 
         return $dataProvider;
     }

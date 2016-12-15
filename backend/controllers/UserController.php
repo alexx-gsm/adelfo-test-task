@@ -68,7 +68,7 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->signup()) {
-                $this->redirect(['index']);
+                return $this->redirect(['index']);
             }
         }
 
@@ -90,7 +90,7 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && null !== $model->fill()) {
             $model->save();
-            $this->redirect(['index']);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,

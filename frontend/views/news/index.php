@@ -4,33 +4,29 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'News';
+$this->title = 'Новости';
 $this->params['breadcrumbs'][] = $this->title;
+
+list($path, $webPath) = Yii::$app->getAssetManager()->publish('@frontend' . '/assets/uploads');
+
 ?>
 <div class="news-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create News', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+  <?php foreach ($news as $item): ?>
+    <div class="panel panel-default">
+      <div class="panel-heading"><?php echo $item->title; ?></div>
+      <div class="panel-body">
+        <div class="article">
+          <img class="img-thumbnail" src="<?php echo $webPath . '/' . $item->image; ?>" alt="">
+          <p class="text"><?php echo $item->text; ?></p>
+        </div>
+      </div>
+      <div class="panel-footer">Автор: <?php echo $item->author->username; ?></div>
+    </div>
+  <?php endforeach ?>
 
-            'id',
-            'title',
-            'text:ntext',
-            '__user_id',
-            'published',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
 </div>

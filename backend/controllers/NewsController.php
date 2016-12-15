@@ -1,13 +1,18 @@
 <?php
 
-namespace frontend\controllers;
+namespace backend\controllers;
 
-use common\models\NewsSearch;
+use backend\components\Upload;
+use backend\components\UploadForm;
+use common\models\User;
 use Yii;
 use common\models\News;
+use common\models\NewsSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -35,11 +40,12 @@ class NewsController extends Controller
      */
     public function actionIndex()
     {
-
-        $news = News::find()->orderBy('id desc')->limit(3)->all();
+        $searchModel = new NewsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'news' => $news,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -63,14 +69,22 @@ class NewsController extends Controller
     public function actionCreate()
     {
         $model = new News();
+        $image = new UploadForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            $image->imageFile = UploadedFile::getInstance($image, 'imageFile');
+            if ($image->upload()) {
+                $model->image = $image->imageFile->name;
+                $model->save();
+                return $this->redirect(['index']);
+            }
         }
+
+        return $this->render('create', [
+            'model' => $model,
+            'image' => $image,
+            'authors' => ArrayHelper::map(User::find()->all(),'id','username'),
+        ]);
     }
 
     /**
